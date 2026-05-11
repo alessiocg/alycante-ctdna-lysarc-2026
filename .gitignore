@@ -1,0 +1,38 @@
+# Données patient sensibles (PHI) - NE JAMAIS COMMITER
+*.xlsx
+*Donnees*.csv
+data_lcmm_long.csv
+baseline_variants_kept.csv
+rr_strict_mapping.csv
+jlcm_*.csv
+*Lea*
+*Base_CART*
+input/
+patients/
+*.rds
+*_propre.*
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environnements
+__pycache__/
+*.py[cod]
+.Rhistory
+.RData
+.Rproj.user/
+node_modules/
+.env
+
+# Outputs locaux
+output/
+results/
+*.log
+
+# Word backups
+~$*

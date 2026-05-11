@@ -1,0 +1,12 @@
+{
+  "additional_refs_v3": [
+    {"id": 113, "authors": "Schuster SJ, Bishop MR, Tam CS, et al.", "year": 2019, "title": "Tisagenlecleucel in Adult Relapsed or Refractory Diffuse Large B-Cell Lymphoma (JULIET).", "journal": "N Engl J Med", "vol": "380(1):45-56", "pmid": "30501490", "doi": "10.1056/NEJMoa1804980"},
+    {"id": 114, "authors": "Rudà R, Pellerino A, Soffietti R.", "year": 2024, "title": "Blood and cerebrospinal fluid biomarkers in neuro-oncology.", "journal": "Curr Opin Neurol", "vol": "37(6):693-701", "pmid": "39329301", "doi": "10.1097/WCO.0000000000001317"},
+    {"id": 115, "authors": "Yoon SE, Kim YJ, Shim JH, et al.", "year": 2021, "title": "Plasma Circulating Tumor DNA in Patients with Primary Central Nervous System Lymphoma.", "journal": "Cancer Res Treat", "vol": "54(2):597-612", "pmid": "34325497", "doi": "10.4143/crt.2021.752"},
+    {"id": 116, "authors": "Šúri A, Mocikova H.", "year": 2025, "title": "Diagnostic approach to leptomeningeal involvement in diffuse large B-cell lymphoma.", "journal": "Expert Rev Mol Diagn", "vol": "25(6):209-215", "pmid": "40354563", "doi": "10.1080/14737159.2025.2485211"},
+    {"id": 117, "authors": "Wang X, Su W, Gao Y, et al.", "year": 2022, "title": "A pilot study of the use of dynamic analysis of cell-free DNA from aqueous humor and vitreous fluid for the diagnosis and treatment monitoring of vitreoretinal lymphomas.", "journal": "Haematologica", "vol": "107(9):2154-2162", "pmid": "35142151", "doi": "10.3324/haematol.2021.279908"},
+    {"id": 118, "authors": "Boardman AP, Salles G.", "year": 2023, "title": "CAR T-cell therapy in large B cell lymphoma.", "journal": "Hematol Oncol", "vol": "41 Suppl 1:112-118", "pmid": "37294963", "doi": "10.1002/hon.3153"},
+    {"id": 119, "authors": "Cook MR, Dorris CS, Makambi KH, et al.", "year": 2023, "title": "Toxicity and efficacy of CAR T-cell therapy in primary and secondary CNS lymphoma: a meta-analysis of 128 patients.", "journal": "Blood Adv", "vol": "7(1):32-39", "pmid": "36260735", "doi": "10.1182/bloodadvances.2022008525"},
+    {"id": 120, "authors": "Miyao K, Yokota H, Sakemura RL.", "year": 2023, "title": "Is CD19-directed chimeric antigen receptor T cell therapy a smart strategy to combat central nervous system lymphoma?", "journal": "Front Oncol", "vol": "12:1082235", "pmid": "36686821", "doi": "10.3389/fonc.2022.1082235"}
+  ]
+}
