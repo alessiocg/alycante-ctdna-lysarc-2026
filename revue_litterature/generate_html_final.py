@@ -220,6 +220,12 @@ for r in unique_refs:
 HTML.append('''
 </div>
 
+<div style="position:fixed;bottom:10px;right:10px;background:white;padding:8px 14px;
+            border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.15);font-size:11px;color:#666">
+  <span id="autoRefreshStatus">⟳ Auto-refresh actif (toutes les 8s)</span>
+  &middot; <a href="#" onclick="event.preventDefault();location.reload()">Forcer maintenant</a>
+</div>
+
 <script>
 function filtrer(filter, evt) {
   document.querySelectorAll('.filter button').forEach(b => b.classList.remove('active'));
@@ -237,6 +243,44 @@ function recherche(q) {
     a.style.display = (a.dataset.search || '').includes(q) ? '' : 'none';
   });
 }
+
+// Auto-refresh : memorise scroll position + filtre + recherche
+const STATE_KEY = 'alycante_state';
+window.addEventListener('beforeunload', () => {
+  const active = document.querySelector('.filter button.active');
+  sessionStorage.setItem(STATE_KEY, JSON.stringify({
+    scroll: window.scrollY,
+    filter: active ? active.textContent : 'Tous',
+    search: document.getElementById('search').value
+  }));
+});
+window.addEventListener('load', () => {
+  const saved = sessionStorage.getItem(STATE_KEY);
+  if (saved) {
+    const s = JSON.parse(saved);
+    if (s.search) {
+      document.getElementById('search').value = s.search;
+      recherche(s.search);
+    }
+    if (s.filter && s.filter !== 'Tous') {
+      const btn = Array.from(document.querySelectorAll('.filter button'))
+        .find(b => b.textContent.startsWith(s.filter.split(' (')[0]));
+      if (btn) btn.click();
+    }
+    if (s.scroll) setTimeout(() => window.scrollTo(0, s.scroll), 50);
+  }
+});
+
+// Recharger automatiquement toutes les 8 secondes
+let refreshIn = 8;
+setInterval(() => {
+  refreshIn--;
+  if (refreshIn <= 0) {
+    location.reload();
+  } else {
+    document.getElementById('autoRefreshStatus').textContent = `⟳ Rafraichissement dans ${refreshIn}s`;
+  }
+}, 1000);
 </script>
 </body></html>
 ''')
