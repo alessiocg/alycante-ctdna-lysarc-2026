@@ -1,14 +1,22 @@
 ################################################################################
-# prepare_data_lcmm.R
-# Reconstruit data_lcmm_long.csv et rr_strict_mapping.csv
+# 00a_prepare_data_lcmm.R
+# Reconstruit data_lcmm_long.csv et rr_strict_mapping.csv depuis le CRF
 # Référence temporelle : J0 = infusion Axi-cel (CAR-T)
 #
 # Sources :
-#   - Donnees.xlsx        : ctDNA, time_from_J0 exact par patient/visite
-#   - ALYCANTE_RNASeq_21OCT2025.xlsx : EFS/OS depuis leucaphérèse + dates leuca/J0
+#   - Donnees.xlsx                          : ctDNA, time_from_J0 exact par patient/visite
+#   - ALYCANTE_RNASeq_21OCT2025.xlsx        : EFS/OS depuis leucaphérèse + dates leuca/J0
+#
+# Définitions :
+#   - data_lcmm_long.csv : efs_event = "Yes" à "Event for EFS" (DEATH-ANY-CAUSE +
+#                          progression/relapse + salvage), conforme au manuscript Blood §107
+#                          (« EFS = time from CAR-T infusion to progression, relapse, salvage
+#                          therapy, or death »).
+#   - rr_strict_mapping.csv : rr_12, rr_24 utilisent R/R strict (Progression OR Relapse
+#                          uniquement, PAS death), pour les métriques Se/Sp/PPV/NPV.
 ################################################################################
 
-# === Path resolution (added for package portability) ===
+# === Path resolution (portable) ===
 .script_dir <- tryCatch({
   args <- commandArgs(trailingOnly = FALSE)
   fa <- grep("^--file=", args, value = TRUE)
@@ -35,7 +43,36 @@ library(dplyr)
 
 setwd(.script_dir)
 
-network <- INPUT_DIR  # portable: was NAS root
+# ── Lecture Donnees.xlsx ──────────────────────────────────────────────────────
+cat("=== Lecture Donnees.xlsx ===\n")
+don <- read_excel(file.path(INPUT_DIR, "Donnees.xlsx"), sheet = 1)
+don$randomisation  <- as.numeric(don$randomisation)
+don$time_from_J0   <- as.numeric(don$time_from_J0)
+don$MRD_quanti_heg <- suppressWarnings(as.numeric(don$MRD_quanti_heg))
+don$MRD_quali      <- as.character(don$MRD_quali)
+cat("Lignes:", nrow(don), "| Patients:", length(unique(don$randomisation)), "\n\n")
+
+# ── Lecture ALYCANTE_RNASeq ───────────────────────────────────────────────────
+cat("=== Lecture ALYCANTE_RNASeq_21OCT2025.xlsx ===\n")
+rna <- read_excel(file.path(INPUT_DIR, "ALYCANTE_RNASeq_21OCT2025.xlsx"), sheet = 1)
+names(rna)[names(rna) == "Subject Identifier for the Study"] <- "randomisation"
+rna$randomisation <- as.numeric(rna$randomisation)
+cat("Patients:", nrow(rna), "\n\n")
+
+# ── Dates leuca et J0 depuis ALYCANTE_RNASeq ─────────────────────────────────
+# "Start of leukapheresis" : texte dd/mm/YYYY
+# "Date of Axi-cel infusion (numeric)" : numéro série Excel OU texte
+parse_date_mixte_v <- function(x) {
+  x_chr <- trimws(as.character(x))
+  x_num <- suppressWarnings(as.numeric(gsub(",", ".", x_chr)))
+  as.Date(ifelse(
+    !is.na(x_num),
+    as.character(as.Date(floor(x_num), origin = "1899-12-30")),
+    as.character(suppressWarnings(
+      coalesce(
+        as.Date(x_chr, format = "%d/%m/%Y"),
+        as.Date(x_chr, format = "%Y-%m-%d")
+      )
     ))
   ))
 }
@@ -56,13 +93,19 @@ cat("NA delay:", sum(is.na(rna$delay_leuca_J0_months)), "\n\n")
 rna$efs_time_leuca <- as.numeric(rna[["EFS from leukapheresis (months)"]])
 rna$os_time_leuca  <- as.numeric(rna[["OS (months)"]])
 
-# Event EFS : R/R strict (Progression ou Relapse uniquement, pas décès)
+# Définitions EFS event :
+#   - efs_event_broad : "Yes" à Event for EFS (= Progression OR Relapse OR Death-any-cause
+#                       OR salvage) → utilisé dans data_lcmm_long.csv (Cox + JLCM survival).
+#                       Conforme à la définition du manuscript Blood §107.
+#   - efs_event_rr    : Progression OR Relapse uniquement (R/R strict) → utilisé dans
+#                       rr_strict_mapping.csv pour les métriques R/R12/R/R24 (Se, Sp, PPV, NPV).
 efs_cols <- grep("^Event for EFS", names(rna), value = TRUE)
 cat("Colonnes EFS event:", paste(efs_cols, collapse=", "), "\n")
 # Col ...23 = type d'événement (texte), col ...24 = Yes/No
 rna$is_rr   <- grepl("Progression|Relapse", rna[[efs_cols[1]]], ignore.case=TRUE)
 rna$has_evt <- tolower(trimws(as.character(rna[[efs_cols[2]]]))) == "yes"
-rna$efs_event_rr <- as.integer(rna$has_evt & rna$is_rr)
+rna$efs_event_rr    <- as.integer(rna$has_evt & rna$is_rr)   # R/R strict (pour rr_mapping)
+rna$efs_event_broad <- as.integer(rna$has_evt)               # toute cause (pour long.csv)
 
 # OS event
 rna$os_event_bin <- as.integer(tolower(trimws(as.character(rna[["OS event"]]))) == "yes")
@@ -76,9 +119,11 @@ cat("Min / Médiane / Max (mois):",
     round(min(rna$efs_time_J0, na.rm=TRUE), 2), "/",
     round(median(rna$efs_time_J0, na.rm=TRUE), 2), "/",
     round(max(rna$efs_time_J0, na.rm=TRUE), 2), "\n")
-cat("Evts R/R:", sum(rna$efs_event_rr, na.rm=TRUE), "\n\n")
+cat("Evts R/R strict :", sum(rna$efs_event_rr, na.rm=TRUE), "\n")
+cat("Evts broad (any):", sum(rna$efs_event_broad, na.rm=TRUE), "\n")
+cat("Diff (death-only):", sum(rna$efs_event_broad, na.rm=TRUE) - sum(rna$efs_event_rr, na.rm=TRUE), "\n\n")
 
-# ── rr_strict_mapping.csv ─────────────────────────────────────────────────────
+# ── rr_strict_mapping.csv (utilise R/R strict) ──────────────────────────────
 cat("=== Calcul rr_strict_mapping ===\n")
 rr_map <- rna %>%
   select(randomisation, efs_time_J0, efs_event_rr) %>%
@@ -92,20 +137,9 @@ rr_map <- rna %>%
 cat("rr_12:", sum(rr_map$rr_12), "| rr_24:", sum(rr_map$rr_24),
     "| rr_12-24:", sum(rr_map$rr_12_24), "\n\n")
 
-# Comparaison avec ancien rr_strict_mapping
-old_rr <- read.csv("rr_strict_mapping.csv")
-if ("randomisation" %in% names(old_rr)) {
-  old_rr$randomisation <- as.numeric(old_rr$randomisation)
-  comp <- merge(rr_map, old_rr[, c("randomisation","rr_12","rr_24")],
-                by="randomisation", suffixes=c("_new","_old"))
-  cat("Différences rr_12 (new vs old):", sum(comp$rr_12_new != comp$rr_12_old, na.rm=TRUE), "\n")
-  cat("Différences rr_24 (new vs old):", sum(comp$rr_24_new != comp$rr_24_old, na.rm=TRUE), "\n\n")
-}
-
 # ── Données ctDNA long format pour JLCM (J0 et post-J0 uniquement) ──────────
 cat("=== Construction data_lcmm_long ===\n")
 
-# Visites incluses dans le JLCM (J0 et post)
 visits_jlcm <- c("D0", "D14", "M1", "M3", "M6", "M9", "M12")
 tp_labels   <- c("J0", "J14", "M1", "M3", "M6", "M9", "M12")
 tp_map      <- setNames(tp_labels, visits_jlcm)
@@ -133,22 +167,24 @@ pat_ids <- data.frame(
 )
 don_jlcm <- left_join(don_jlcm, pat_ids, by = "randomisation")
 
-# Merger EFS/OS
+# Merger EFS broad (death-any-cause) + OS
 surv_j0 <- rna %>%
-  select(randomisation, efs_time_J0, efs_event_rr, os_time_J0, os_event_bin) %>%
-  rename(efs_time = efs_time_J0, efs_event = efs_event_rr,
+  select(randomisation, efs_time_J0, efs_event_broad, os_time_J0, os_event_bin) %>%
+  rename(efs_time = efs_time_J0, efs_event = efs_event_broad,
          os_time = os_time_J0, os_event = os_event_bin)
 
 don_jlcm <- left_join(don_jlcm, surv_j0, by = "randomisation") %>%
   filter(!is.na(efs_time) & efs_time > 0) %>%
   arrange(ID, time_from_J0) %>%
   rename(time = time_from_J0) %>%
-  mutate(heg_log = log10(pmax(heg, 1e-6))) %>%  # log10, heg déjà log → heg_log=log10(heg)?
+  mutate(heg_log = log10(pmax(heg, 1e-6))) %>%
   select(ID, randomisation, time, timepoint, heg, heg_log, mrd_pos,
          efs_time, efs_event, os_time, os_event)
 
 cat("Patients JLCM :", length(unique(don_jlcm$ID)), "\n")
 cat("Observations  :", nrow(don_jlcm), "\n")
+cat("EFS events (broad def, patient-level):",
+    sum(unique(don_jlcm[c("ID","efs_event")])$efs_event), "\n")
 cat("EFS range     :", round(min(don_jlcm$efs_time),2), "-",
     round(max(don_jlcm$efs_time),2), "mois depuis J0\n")
 cat("time range    :", round(min(don_jlcm$time),2), "-",
@@ -160,14 +196,27 @@ print(don_jlcm %>% group_by(timepoint) %>%
       arrange(t_med))
 
 # ── Sauvegarde ────────────────────────────────────────────────────────────────
-write.csv(don_jlcm, "data_lcmm_long_J0.csv", row.names = FALSE)
-cat("\ndata_lcmm_long_J0.csv écrit :", nrow(don_jlcm), "lignes\n")
+# Write directly to INPUT_DIR (replace existing). Backup is made before overwrite.
+out_long <- file.path(INPUT_DIR, "data_lcmm_long.csv")
+out_rr   <- file.path(INPUT_DIR, "rr_strict_mapping.csv")
+backup_long <- file.path(INPUT_DIR, "data_lcmm_long.csv.bak_pre_efs_broad")
+backup_rr   <- file.path(INPUT_DIR, "rr_strict_mapping.csv.bak_pre_efs_broad")
 
-write.csv(rr_map, "rr_strict_mapping_J0.csv", row.names = FALSE)
-cat("rr_strict_mapping_J0.csv écrit :", nrow(rr_map), "lignes\n")
+if (file.exists(out_long) && !file.exists(backup_long)) {
+  file.copy(out_long, backup_long)
+  cat("Backup créé:", backup_long, "\n")
+}
+if (file.exists(out_rr) && !file.exists(backup_rr)) {
+  file.copy(out_rr, backup_rr)
+  cat("Backup créé:", backup_rr, "\n")
+}
 
-cat("\n=== ATTENTION : vérifier les sorties avant de remplacer les fichiers actuels ===\n")
-cat("  data_lcmm_long.csv     (actuel, depuis leuca)\n")
-cat("  data_lcmm_long_J0.csv  (nouveau, depuis J0) <- à valider\n")
-cat("  rr_strict_mapping.csv     (actuel)\n")
-cat("  rr_strict_mapping_J0.csv  (nouveau) <- à valider\n")
+write.csv(don_jlcm, out_long, row.names = FALSE)
+cat("\nÉcrit:", out_long, "(", nrow(don_jlcm), "lignes)\n")
+
+write.csv(rr_map, out_rr, row.names = FALSE)
+cat("Écrit:", out_rr, "(", nrow(rr_map), "lignes)\n")
+
+cat("\n=== DONE ===\n")
+cat("Convention EFS dans data_lcmm_long.csv : broad (toute cause, conforme manuscript Blood §107).\n")
+cat("Convention R/R dans rr_strict_mapping.csv : strict (Progression OR Relapse, sans death).\n")
