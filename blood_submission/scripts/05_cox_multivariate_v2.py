@@ -34,9 +34,9 @@ except Exception:
 _legacy_master = os.path.join(INPUT_DIR, "master_dataset.csv")
 INPUT = _legacy_master if os.path.exists(_legacy_master) else os.path.join(INPUT_DIR, 'master_dataset.csv')
 OUT_CSV_PKG = os.path.join(TABLES_DIR, 'cox_multivariate_v2_metrics.csv')
-# Legacy paths (kept for backward compat with the NAS pipeline)
-NAS_BASE = os.path.dirname(OUTPUT_DIR)
-OUT_CSV_NAS = os.path.join(NAS_BASE, 'output', 'scripts_figures', 'data', 'cox_multivariate_v2_metrics.csv')
+# Legacy paths (kept for backward compat with the NAS pipeline if BLOOD_NAS_ROOT set)
+_nas = os.environ.get("BLOOD_NAS_ROOT", "")
+OUT_CSV_NAS = os.path.join(_nas, 'output', 'scripts_figures', 'data', 'cox_multivariate_v2_metrics.csv') if _nas else None
 OUT_CSV_LOCAL = os.path.join(INPUT_DIR, "cox_multivariate_v2_metrics.csv")
 
 df = pd.read_csv(INPUT)

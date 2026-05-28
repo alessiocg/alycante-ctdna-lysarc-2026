@@ -462,7 +462,7 @@ def build_supp_doc():
          "Predicted-risk quintiles versus observed 12-month event rates. "
          "Calibration slope = 1.51 and intercept = −0.98, indicating mild "
          "under-dispersion of predicted risks. These metrics should be "
-         "interpreted in the context of n = 44 with 26 events and "
+         "interpreted in the context of n = 44 with 21 lymphoma EFS events and "
          "quasi-complete class separation; minor recalibration would be "
          "required for external use."),
         ("S3", "Time-dependent AUC",
@@ -487,7 +487,7 @@ def build_supp_doc():
          "discrimination metric (0.81 EFS, 0.79 OS). By contrast, the "
          "multivariable C-index exhibits substantial optimism (+0.31 EFS, "
          "+0.28 OS), as expected for a 3-covariate Cox model in n = 44 with "
-         "26 events and quasi-complete class separation."),
+         "21 lymphoma EFS events and quasi-complete class separation."),
         ("S6", "Heatmap of individual ctDNA dynamics",
          FIG_DIR / "SuppFig6_heatmap_dynamics.png",
          "Heatmap of individual log₁₀ hEG trajectories by day-14 JLCM-ctDNA "
@@ -608,7 +608,7 @@ def build_supp_doc():
         "C-index exhibits severe optimism (+0.31 EFS, +0.28 OS); the "
         "corresponding bootstrap-corrected estimates (0.52 EFS, 0.53 OS) "
         "reflect the expected overfitting of a 3-covariate Cox model in 44 "
-        "patients with 26 events and quasi-complete class separation, and "
+        "patients with 21 lymphoma EFS events and quasi-complete class separation, and "
         "are not interpreted as generalizable performance metrics. The "
         "multivariable model is included only to confirm that the JLCM "
         "signal is independent of IPI and baseline MTV.",
@@ -623,7 +623,7 @@ def build_supp_doc():
         "Calibration slope (1.51) and intercept (−0.98) reported. These "
         "metrics indicate mild under-dispersion of predicted risks and that "
         "minor recalibration would be required for external use; they should "
-        "be interpreted in the context of n = 44 with 26 events.",
+        "be interpreted in the context of n = 44 with 21 lymphoma EFS events.",
     )
     emit_supp_table_from_csv(
         "S5", "Time-dependent AUC at 6, 12, 18, and 24 months",
@@ -795,7 +795,7 @@ def build_supp_doc():
          "1.10 (0.97-1.25)", ".145", "0.704",
          "+2.00 (theoretical max)"],
         ["M_jlcm: JLCM binary class", "EFS", "0.808",
-         "ridge-penalized HR 17.7 (6.3-50.0)", "<.001", "1.000", "—"],
+         "ridge-penalized HR 15.1 (5.1-44.3)", "<.001", "1.000", "—"],
         ["M_a: day-14 log₁₀ hEG (continuous)", "OS", "0.597",
          "1.13 (0.94-1.35)", ".211", "0.663", "+1.58"],
         ["M_b: Δlog₁₀ baseline→D14 (continuous)", "OS", "0.587",
@@ -812,8 +812,9 @@ def build_supp_doc():
         "adds information beyond the day-14 absolute value or the linear "
         "early decay slope. The JLCM C-index exceeds both benchmarks by "
         "approximately 0.20 units. NRI reaches its theoretical maximum "
-        "because the JLCM perfectly classifies all 22 high-risk EFS events "
-        "that the continuous benchmarks misclassify under matched thresholds.",
+        "because the JLCM perfectly classifies all 18 high-risk lymphoma "
+        "EFS events that the continuous benchmarks misclassify under matched "
+        "thresholds.",
     )
 
     # S18 — NEW: Frank-style J28 refit
@@ -851,8 +852,8 @@ def build_supp_doc():
          "—", "—", "—"],
         ["Ridge λ = 0.05", "34.1", "8.5-136", "5.9×10⁻⁷", "0.849",
          "—", "—", "—"],
-        ["**Ridge λ = 0.1 (reported in main text)**", "**17.1**",
-         "**5.8-50.9**", "**3.3×10⁻⁷**", "**0.850**", "**7.75**",
+        ["**Ridge λ = 0.1 (reported in main text)**", "**14.9**",
+         "**4.8-46.4**", "**< .001**", "**0.859**", "**7.75**",
          "**2.7-22.2**", "**1.4×10⁻⁴**"],
         ["Ridge λ = 0.2", "8.8", "3.7-21", "7.5×10⁻⁷", "0.842",
          "—", "—", "—"],
@@ -873,7 +874,7 @@ def build_supp_doc():
         "MTV; n = 44 EFS; n = 41 OS)",
         s19_rows,
         "The unpenalized Cox model diverges because of quasi-complete class "
-        "separation (22/22 EFS events in high-risk vs 4/22 in low-risk). "
+        "separation (18/22 lymphoma EFS events in high-risk vs 3/22 in low-risk). "
         "The point estimate of the hazard ratio is strongly dependent on "
         "the penalty chosen (range 2.5 to >5000 across reasonable choices), "
         "but the direction (HR ≫ 1) and the statistical significance are "
@@ -885,8 +886,8 @@ def build_supp_doc():
         "Firth penalization (Firth 1993^20^; Heinze-Schemper 2001^21^) is "
         "the canonical solution to monotone likelihood in Cox regression "
         "and is reported alongside the ridge estimates for transparency. "
-        "The main text reports the ridge λ = 0.1 estimate (17.7 EFS "
-        "univariable, 17.1 multivariable; 8.4 OS univariable, 7.75 "
+        "The main text reports the ridge λ = 0.1 estimate (15.1 EFS "
+        "univariable, 14.9 multivariable; 8.4 OS univariable, 7.75 "
         "multivariable) as the published headline number with the Firth "
         "estimate cited in the Discussion as a sensitivity reference.",
     )

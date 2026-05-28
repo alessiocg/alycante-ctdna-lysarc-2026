@@ -66,15 +66,8 @@ for ep in ['efs', 'os']:
 res_df = pd.DataFrame(results)
 out_csv = os.path.join(TABLES_DIR, 'cox_multivariate_metrics.csv')
 res_df.to_csv(out_csv, index=False)
-# Legacy best-effort copies (silently ignored if path not writable)
-for _p in (
-    os.path.dirname(OUTPUT_DIR),
-    os.path.join(TABLES_DIR, "cox_multivariate_metrics.csv"),
-):
-    try:
-        res_df.to_csv(_p, index=False)
-    except Exception:
-        pass
+# Also save as cox_univariate_metrics.csv for backward compatibility
+res_df.to_csv(os.path.join(TABLES_DIR, 'cox_univariate_metrics.csv'), index=False)
 
 print('\n=== Summary table (HR JLCM par modele) ===')
 sub = res_df[res_df['var'] == 'jlcm'][['endpoint', 'model', 'HR', 'CI_low', 'CI_up', 'p', 'C_index', 'n']]
