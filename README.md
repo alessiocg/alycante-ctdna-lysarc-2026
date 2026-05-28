@@ -12,14 +12,16 @@
 
 **ALYCANTE** is a French academic phase 2 trial (LYSARC sponsorship): **axicabtagene ciloleucel (axi-cel)** CAR T-cell therapy as **2nd-line** treatment in patients with **relapsed/refractory large B-cell lymphoma (R/R LBCL)** who are **ineligible for autologous stem-cell transplantation** (transplant-ineligible, ti-LBCL). The trial enrolled 62 patients across French centers (LYSARC network); the primary analysis was published as Houot et al., *Nat Med* 2023; the final analysis is in revision at *JCO* (2026).
 
-**This biomarker substudy** asks one question: *can we identify, very early after CAR-T infusion, which patients are heading toward relapse?* The marker we study is **circulating tumor DNA (ctDNA)** measured serially in plasma by **CAPP-Seq** (a targeted deep-sequencing assay). We measured ctDNA at 7 timepoints (D-5, D0, D14, M1, M3, M6, M9, M12) in 57 patients with usable longitudinal samples.
+**This biomarker substudy** asks one question: *can we identify, very early after CAR-T infusion, which patients are heading toward relapse?* The marker we study is **circulating tumor DNA (ctDNA)** measured serially in plasma by **CAPP-Seq** (a targeted deep-sequencing assay). We measured ctDNA at 7 post-infusion timepoints (D0, D14, M1, M3, M6, M9, M12) in 57 patients with usable longitudinal samples (a pre-leukapheresis sample at D-5 is collected for assay setup but is not used in the JLCM training set).
 
 **Statistical approach.** Rather than thresholding a single timepoint, we fit a **Joint Latent Class Mixed Model (JLCM)** that simultaneously models (a) the longitudinal ctDNA trajectory and (b) the time-to-event for relapse — and uses this joint structure to assign each patient to one of two latent classes. Then, at **day 14** (already after one cycle of CAR-T expansion), the trained model can be deployed via `predictClass()` to assign a new patient to **low-risk** or **high-risk**, and decisions can follow.
 
 **Headline result.** The day-14 ctDNA-JLCM class separates the cohort strongly:
-- 22 patients classified **high-risk** → 22 EFS events (100% relapse)
-- 22 patients classified **low-risk** → 4 EFS events (18% relapse, all late)
-- **HR EFS 17.7** (95% CI 6.3–50.0), C-index 0.81; HR OS 8.4 (3.1–22.8), C-index 0.79
+- 22 patients classified **high-risk** → 18 lymphoma EFS events (82% relapsed/progressed; the 4 others died of treatment-related toxicity or intercurrent illness, censored at death)
+- 22 patients classified **low-risk** → 3 lymphoma EFS events (14%, all late ≥17 months); 1 additional patient died of intercurrent illness, censored
+- **HR EFS 15.1** (95% CI 5.1–44.3), C-index 0.81; HR OS 8.4 (3.1–22.8), C-index 0.80
+  - EFS = lymphoma-specific events only (relapse/progression/lymphoma death); non-lymphoma deaths censored — see §107 of the manuscript
+  - OS = all-cause death (standard)
 - Outperforms day-14 PET (Deauville ≥4), day-14 single-timepoint ctDNA, and month-3 CMR
 - External validation on Henri-Mondor real-world cohort (n=18) directionally confirms
 
@@ -40,7 +42,7 @@ The manuscript (v8.9) develops, justifies, and benchmarks this approach for *Blo
 │   │   ├── Blood_article_v8_9.docx          ← Main manuscript (Blood format)
 │   │   ├── Blood_article_v8_9.md            ← Source markdown
 │   │   ├── Blood_article_v8_9_supplemental.docx
-│   │   ├── figures/                         ← 16 PNG/PDF (Fig1–5 + SuppFig1–10 + Visual abstract)
+│   │   ├── figures/                         ← Fig1–5 (main) + SuppFig1–12 + Visual abstract, each in PNG + PDF
 │   │   └── tables/                          ← Aggregate CSVs (Table 1, Table 2, SuppTable S1–S19)
 │   └── scripts/                             ← 50+ reproducibility scripts
 │       ├── _paths.{R,py}                    ← portable path resolver
@@ -82,12 +84,12 @@ Each headline metric maps to one script. Examples:
 
 | Claim in the manuscript | Script that produced it | Output file |
 |---|---|---|
-| HR EFS 17.7, C-index 0.81 | `04_cox_univariate.py` | `output/tables/cox_univariate_metrics.csv` |
+| HR EFS 15.1, C-index 0.81 | `04_cox_univariate.py` | `output/tables/cox_univariate_metrics.csv` |
 | HR OS 8.4 | `04_cox_univariate.py` | idem |
 | Multivariable C-index 0.84 + .632+ optimism | `05_cox_multivariate_v2.py` + `30_fig_supp_bootstrap_cindex.py` | `output/tables/SuppTable_bootstrap_cindex.csv` |
 | ctDNA-JLCM vs MTV-JLCM κ = 0.32 | `24_fig5_ctdna_vs_mtv.py` | `output/tables/SuppTable_concordance.csv` |
 | External validation HR EFS 8.3 (Henri-Mondor) | `11_validation_lea.R` | (output in figure 4 + manuscript text) |
-| 22/22 + 4/22 = 26 EFS events in n=44 | `04_cox_univariate.py` + `master_dataset.csv` | (computed from CRF merge) |
+| 18/22 + 3/22 = 21 lymphoma EFS events in n=44 | `04_cox_univariate.py` + `master_dataset.csv` | (computed from CRF merge ; lymphoma-specific definition) |
 
 ### To reproduce the entire pipeline
 
@@ -116,7 +118,7 @@ $env:BLOOD_PKG_ROOT = "C:\absolute\path\to\blood_submission"  # PowerShell
 
 2. **JLCM seed = 123, hard-coded.** R's `Jointlcmm()` with `random=~time` is sensitive to initialization. We pre-specified a 20-seed sweep (`00b_reseed_jlcm_rt.R`); seed 123 was selected on the basis of **`predictClass` stability** (the operational criterion for a deployable classifier) with BIC as a secondary tie-breaker. Seeds 456, 2024, etc. crash `predictClass()`. See SuppTable S14 for seed-stability sweep results.
 
-3. **`predictClass()` is the deployment operator.** The model trains on all 62 patients (full longitudinal) but is **deployed** at day 14 via `predictClass()` on the day-14 truncated trajectory — this is the *train-rich, deploy-early* design that the manuscript emphasizes.
+3. **`predictClass()` is the deployment operator.** The model is **trained on the 57 ALYCANTE patients with at least one exploitable ctDNA timepoint** (5 of the 62 mFAS patients excluded for missing day-14 sample or technical sequencing failure) and is **deployed** at day 14 via `predictClass()` on the day-14 truncated trajectory — this is the *train-rich, deploy-early* design that the manuscript emphasizes. Of the 57 trained, 44 had complete IPI + baseline-MTV covariates and entered all reported Cox/KM analyses.
 
 4. **Filter follow-up for R/R metrics.** When computing R/R12 or R/R24 (Se, Sp, PPV, NPV), patients censored before the horizon (`efs_time < 12m` AND `efs_event == 0`) must be **excluded**, not treated as "no R/R". This is critical for the sensitivity/specificity table in the manuscript.
 
