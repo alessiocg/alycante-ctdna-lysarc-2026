@@ -1,0 +1,8 @@
+metric,value
+n,44.0
+cohen_kappa,0.31818181818181823
+agreement_pct,65.9090909090909
+se_mtv_vs_ctdna,0.36363636363636365
+sp_mtv_vs_ctdna,0.9545454545454546
+ppv_mtv_vs_ctdna,0.8888888888888888
+npv_mtv_vs_ctdna,0.6

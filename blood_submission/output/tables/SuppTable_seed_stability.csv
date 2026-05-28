@@ -1,0 +1,4 @@
+Initialization seed (1-20 grid),BIC,within 5 units of minimum,Class assignment concordance with seed=123,Concordant patients / total (57)
+seed=123 (selected by predictClass stability + BIC tie-breaker),1254.6,Y (reference; within 5 BIC units of minimum),1.00,57/57
+Other seeds within BIC<=1259.6 (range across compliant seeds),"1254.6 to 1259.4 (median 1257.1)",Y,>=0.86,49/57 (median concordance 86.0%)
+Other seeds outside BIC band,> 1259.6 (up to ~1330),N,variable,—

@@ -1,0 +1,5 @@
+class,n_with_lead_time,median_lead_time_m,q1_lead_time_m,q3_lead_time_m
+Low-risk (classifiable),1,28.98,28.98,28.98
+High-risk (classifiable),11,1.94,0.81,4.99
+Non-classifiable (incomplete covariates with event),4,1.74,0.92,2.66
+Overall,16,2.25,0.92,4.96

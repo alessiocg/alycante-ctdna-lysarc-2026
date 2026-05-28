@@ -1,0 +1,7 @@
+variable,n_total,n_missing,pct_missing
+jlcm,57,13,22.8
+efs_time,57,0,0.0
+os_time,57,3,5.3
+mtv_log_base,57,0,0.0
+ipi_high,57,0,0.0
+ipi_total,57,0,0.0

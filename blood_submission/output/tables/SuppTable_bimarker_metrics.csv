@@ -1,0 +1,9 @@
+model,endpoint,covariate,HR,HR_lo,HR_hi,p,C_index
+ctDNA-JLCM only,EFS,JLCM-ctDNA high-risk,inf (separation),0,inf,0.997,0.808
+JLCM-MTV only,EFS,JLCM-MTV high-risk,0.88,0.33,2.35,0.797,0.498
+ctDNA-JLCM + JLCM-MTV,EFS,JLCM-ctDNA high-risk,inf (separation),0,inf,0.997,0.807
+ctDNA-JLCM + JLCM-MTV,EFS,JLCM-MTV high-risk,1.20,0.43,3.32,0.727,0.807
+ctDNA-JLCM only,OS,JLCM-ctDNA high-risk,28.82,3.78,219.74,0.0012,0.788
+JLCM-MTV only,OS,JLCM-MTV high-risk,0.56,0.16,1.94,0.356,0.561
+ctDNA-JLCM + JLCM-MTV,OS,JLCM-ctDNA high-risk,31.48,4.10,241.44,0.0009,0.824
+ctDNA-JLCM + JLCM-MTV,OS,JLCM-MTV high-risk,0.42,0.12,1.48,0.177,0.824

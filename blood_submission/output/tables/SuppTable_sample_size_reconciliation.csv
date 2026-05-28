@@ -1,0 +1,21 @@
+Step,n,Description,Used in
+ALYCANTE mFAS (parent FA),62,All patients infused with axi-cel (modified full analysis set; Houot et al. JCO 2026),Reference cohort
+Excluded - missing D14 sample,3,No plasma available at day 14 +/- 1,—
+Excluded - sequencing failure,2,Technical CAPP-Seq failure at any timepoint,—
+Biomarker training set (paired baseline+D14),57,Patients with paired baseline and day-14 ctDNA and at least one additional timepoint,JLCM training; descriptive trajectories (Figure 1)
+Baseline ctDNA evaluable,54,Baseline sample above pre-specified QC threshold,Baseline MRD descriptives (50/54 = 92.6%)
+Baseline MRD-positive,50,Detectable ctDNA at baseline,—
+Day-14 ctDNA evaluable,51,Day-14 sample above pre-specified QC threshold,Day-14 MRD descriptive (36/51 = 70.6%)
+Classifiable by predictClass (D14),44,Posterior probability assignable from baseline+D14 measurements; complete IPI and baseline-MTV covariates; 22 low-risk + 22 high-risk,Primary Cox and KM analyses (Figures 2 3 5; Table 2)
+EFS events in classifiable set,25,EFS event during follow-up (n=44),Primary EFS Cox (univariable and multivariable)
+OS events in classifiable set,17,Death during follow-up (n=44),Primary OS Cox; n drops to 41 in OS bivariable subsets owing to additional missingness
+Day-14 Deauville evaluable,52,Central PET review available at D14,Deauville D14 >=4 Cox (n=52 EFS; n=49 OS)
+Day-14 ctDNA + Deauville D14 (bivariable EFS),41,Subset with both classifications and complete follow-up,Bivariable Cox (Deauville/Lugano D14)
+Day-14 ctDNA + Deauville D14 (bivariable OS),38,Subset with both classifications and OS data,Bivariable Cox OS (Deauville/Lugano D14)
+JLCM-Deauville classifiable (full longitudinal),55,371 Deauville measurements; ng=2 JLCM (BIC 1590.0 vs 1594.8),JLCM-Deauville Cox EFS (n=55 events 34)
+JLCM-Deauville classifiable with OS data,52,OS subset of JLCM-Deauville,JLCM-Deauville Cox OS
+ctDNA-JLCM + JLCM-Deauville (bivariable EFS),44,Both classifiable; same subset as primary EFS,Bivariable Cox (JLCM-Deauville EFS); also Table S13
+ctDNA-JLCM + JLCM-Deauville (bivariable OS),41,Both classifiable with OS data,Bivariable Cox (JLCM-Deauville OS); spurious protective HR 0.27 explained in Table S13 footnote
+Henri-Mondor cohort (screened),33,Consecutive adult R/R LBCL treated with CD19-CAR-T at AP-HP Creteil 2019-2024,External cohort
+Henri-Mondor classifiable,18,Paired baseline+D14 ctDNA available; predictClass applied without re-fitting; 10 low-risk + 8 high-risk,External validation (Figure 4); 9 EFS events; 3 deaths
+Henri-Mondor axi-cel subgroup (sensitivity),10,Pre-specified axi-cel-only subset,Pre-specified sensitivity analysis (same direction of effect)

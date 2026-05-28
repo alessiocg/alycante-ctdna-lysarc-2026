@@ -1,0 +1,13 @@
+label,n,n_events,HR,lower,upper,p,c_index
+Deauville_D14_>=4 EFS,52,32,0.85,0.39,1.84,0.68,0.506
+Deauville_D14_>=4 OS,49,22,0.43,0.15,1.29,0.132,0.571
+Deauville_M3_>=4 EFS,49,30,2.01,0.89,4.56,0.0932,0.563
+Deauville_M3_>=4 OS,46,20,0.87,0.29,2.61,0.807,0.514
+Lugano_D14_non-CMR EFS,52,32,0.85,0.39,1.84,0.68,0.506
+Lugano_D14_non-CMR OS,49,22,0.43,0.15,1.29,0.132,0.571
+Lugano_M3_non-CMR EFS,49,30,2.01,0.89,4.56,0.0932,0.563
+Lugano_M3_non-CMR OS,46,20,0.87,0.29,2.61,0.807,0.514
+JLCM-Deauville (high vs low) EFS,55,34,1.83,0.88,3.79,0.104,0.557
+JLCM-Deauville (high vs low) OS,52,23,0.81,0.3,2.18,0.674,0.518
+JLCM-ctDNA (high vs low) EFS [reference],44,25,3031361834.86,0.0,inf,0.997,0.808
+JLCM-ctDNA (high vs low) OS [reference],41,17,28.82,3.78,219.74,0.00118,0.788

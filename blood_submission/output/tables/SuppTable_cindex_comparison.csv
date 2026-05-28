@@ -1,0 +1,15 @@
+model,n,c_index,c_index_se
+ctDNA-JLCM only (EFS),44,0.808,0.022
+Deauville_D14 only (EFS),52,0.506,0.045
+Lugano_D14 only (EFS),52,0.506,0.045
+ctDNA-JLCM + Deauville_D14 (EFS),41,0.817,0.03
+ctDNA-JLCM + Lugano_D14 (EFS),41,0.817,0.03
+Deauville-JLCM only (EFS),55,0.557,0.038
+ctDNA-JLCM + Deauville-JLCM (EFS),44,0.824,0.03
+ctDNA-JLCM only (OS),41,0.788,0.038
+Deauville_D14 only (OS),49,0.571,0.051
+Lugano_D14 only (OS),49,0.571,0.051
+ctDNA-JLCM + Deauville_D14 (OS),38,0.802,0.043
+ctDNA-JLCM + Lugano_D14 (OS),38,0.802,0.043
+Deauville-JLCM only (OS),52,0.518,0.046
+ctDNA-JLCM + Deauville-JLCM (OS),41,0.827,0.038

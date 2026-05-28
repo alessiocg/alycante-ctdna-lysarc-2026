@@ -29,8 +29,10 @@ __pycache__/
 node_modules/
 .env
 
-# Outputs locaux
+# Outputs locaux (mais on commit blood_submission/output/ explicitement — docx + figures + tables aggregat seulement)
 output/
+!blood_submission/output/
+!blood_submission/output/**
 results/
 *.log
 
