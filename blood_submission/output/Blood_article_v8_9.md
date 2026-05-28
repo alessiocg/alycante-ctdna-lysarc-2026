@@ -31,7 +31,7 @@ Email: marie-helene.delfau@aphp.fr
 ## Word counts
 - Abstract: 248 words (structured, four-section; ≤250 Blood limit)
 - Main text (Introduction through Discussion): 4,182 words (ScholarOne strict count, ≤4,500 Blood limit; 318-word safety margin)
-- References: 50
+- References: 31
 - Tables: 2
 - Figures: 5
 - Supplemental figures: 12; supplemental tables: 19
@@ -206,7 +206,7 @@ In summary, day-14 joint latent class modeling of plasma ctDNA stratified transp
 | Baseline log~10~ hEG, median (IQR) | 0.40 (0.13-0.55) | 0.47 (0.29-0.59) | .231 |
 | Baseline Deauville score, median (IQR) | 5 (5-5) | 5 (5-5) | 1.000 |
 
-*P* values from Wilcoxon or Fisher exact. Boldface, *P* < .05. ^*^MRD positivity reported on the 44 classifiable subset (3 patients had baseline below QC; 41 evaluable, 38 MRD+ = 92.7%). Cohort-wide baseline MRD positivity (54 evaluable training set) was 50/54 = 92.6% (supplemental Table S9). Effective sample sizes are reconciled in supplemental Table S15.
+*P* values from Wilcoxon or Fisher exact. Boldface, *P* < .05. ^*^"MRD-positive at baseline" denotes detection of ≥1 lymphoma-specific variant in the CAPP-Seq panel at baseline plasma (≥0.005 VAF, duplex UMI error correction); this is the same operational definition as "detectable baseline ctDNA" used in the Results section. The two denominators differ only by the analytic subset: **Table 1** restricts to the 44 classifiable patients of whom 41 had a baseline plasma sample meeting QC (3 patients had insufficient DNA input or coverage <2,000× and were excluded from the baseline-VAF analysis) — 38/41 = 92.7%. The **Results section** reports the same metric on the 57-patient training set (of whom 54 had QC-passing baseline samples) — 50/54 = 92.6%. Effective sample sizes are reconciled in supplemental Table S15.
 
 ---
 
