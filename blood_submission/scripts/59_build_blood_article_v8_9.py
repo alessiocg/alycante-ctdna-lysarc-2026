@@ -532,6 +532,38 @@ def build_supp_doc():
         ("S12", "Theoretical trajectories (panel A of Figure 1)",
          FIG_DIR / "Fig1A_trajectories_theoretical.png",
          "Theoretical mean trajectories alone (panel A of main Figure 1)."),
+        ("S13", "Pipeline-induced divergence between routine and trial-grade variant calling beyond day 14",
+         FIG_DIR / "Explo_deviation_by_timepoint.png",
+         "Median log₁₀ hEG per timepoint in the ALYCANTE training cohort "
+         "(processed through the trial-grade phased-variants pipeline: "
+         "statistical filtering, Monte-Carlo significance testing, duplex UMI "
+         "polishing) versus the Henri-Mondor validation cohort (processed "
+         "through the routine clinical pipeline: analyst-supervised, no "
+         "statistical filtering). **Panel A** : ALYCANTE low-risk patients "
+         "reach the MRD-negative imputation floor (log₁₀ hEG = −6, equivalent "
+         "to undetectable ctDNA) by month 1 and remain there through month "
+         "12, whereas Henri-Mondor low-risk patients remain in the −0.3 to "
+         "+0.2 log₁₀ range across all post-D14 timepoints because the "
+         "routine pipeline does not measure values below ≈10⁻¹ hEG/mL "
+         "(0 of 18 Henri-Mondor patients classified MRD-negative at D14, "
+         "versus 23 of 51 [45%] in ALYCANTE). **Panel B** : deviation defined "
+         "as (Henri-Mondor median − ALYCANTE median) per timepoint and per "
+         "class. The deviation is < 0.5 log₁₀ at D0 and D14 (the calibration "
+         "anchor window) but exceeds 5.7 log₁₀ from M1 onward in the "
+         "low-risk class, with the high-risk deviation remaining < 1.3 "
+         "log₁₀ throughout. The sharp deviation onset between D14 and M1 in "
+         "the low-risk class reflects the inability of the routine pipeline "
+         "to discriminate residual tumor signal from clonal hematopoiesis "
+         "and panel artifacts once ctDNA falls below the routine "
+         "quantification floor. **At D14 the two pipelines converge** "
+         "(median log₁₀ hEG deviation, −0.06 in ALYCANTE vs +0.18 in "
+         "Henri-Mondor across all classifiable patients), allowing "
+         "pipeline-independent classifier deployment. **Beyond D14 the "
+         "pipelines diverge**, defining D14 as the deployment boundary in "
+         "current routine clinical implementations and motivating "
+         "patient-specific variant tracking or routine implementation of "
+         "phased-variants statistical filtering for extension to later "
+         "timepoints."),
     ]
 
     for tag, title, path, caption in figs:
