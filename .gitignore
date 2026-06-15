@@ -38,3 +38,15 @@ results/
 
 # Word backups
 ~$*
+
+# V4 rebuild — donnees derivees (PHI / patient-level), JAMAIS commiter
+# (le whitelist !blood_submission/output/** preserve les figures Fig_v4_*.png)
+*REBUILT*
+data_lcmm_long_*.csv
+lea_all_jlcm_input*.csv
+lea_all_jlcm_info*.csv
+loo_landmark*_oos.csv
+lea_revalidation_*_pred.csv
+*_PRIVE.*
+model_V4*.rds
+ANALYSE_FV_OCTOBRE_2025/

@@ -131,8 +131,9 @@ python 99_audit_visuel_low_risk_high_risk.py    # regenerates all figures; no BO
 | v8.9 (rev.) | 28 May | Citation renumber (50→31, citation-order); Fig 2 image fix; title-page ref count |
 | v8.9 (rev.) | 28 May | **EFS redefined lymphoma-specific** (regex bug fix; HR EFS 17.7→15.1, events 26→21) |
 | **v8.9 (final)** | **29 May** | **Cross-pipeline robustness reframe (Option 2): SuppFig S13; D14 = deployment boundary** |
+| **v9.0 (V4 rebuild)** | **15 Jun** | **ctDNA MRD ground truth re-derived from FV reports (scripts 50–56); JLCM robust to whitelist definition (27 R/R, RR@12m 100/0); honest LOO-landmark 57/57 (Se/Sp 100% @12m); clean external validation Léa (n=46, log-rank p<0.0001). Manuscript refonte on V4 in progress.** |
 
-Detailed reports in `reviews/`. Exploratory analyses behind the cross-pipeline finding in `explorations/`.
+Detailed reports in `reviews/` (V4 rebuild: `reviews/REVIEW_v9_0_v4_rebuild.md`). Exploratory analyses behind the cross-pipeline finding in `explorations/`.
 
 ---
 
@@ -146,6 +147,8 @@ Detailed reports in `reviews/`. Exploratory analyses behind the cross-pipeline f
 - ✅ Cover letter ready (`output/Blood_cover_letter_v8_9.docx`)
 - ✅ Cross-pipeline validation reframed; D14 deployment boundary documented (SuppFig S13)
 - ✅ Package autonomous (`BLOOD_PKG_ROOT` relocatable); GitHub public for audit
+- 🟢 **V4 rebuild** (FV-sourced MRD truth, scripts 50–56) confirms the v8.9 prognostic result from a trusted source and adds a clean external validation (Léa routine CAR-T, log-rank p<0.0001); see `reviews/REVIEW_v9_0_v4_rebuild.md`
+- 🟡 **Manuscript refonte on V4 in progress**: recompute Cox/discrimination on V4 classes, then refresh main text + figures + supplement to rest on the FV-sourced ground truth
 - 🟡 **Pending PI action**: coordinate companion submission with ALYCANTE FA (Houot et al. JCO 2026) acceptance; confirm coauthor disclosures align with parent paper
 
 ---
